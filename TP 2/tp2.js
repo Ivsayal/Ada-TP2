@@ -1,3 +1,9 @@
+// Vonnie, te deje algunas observaciones a lo largo de tu trabajo
+// En general esta muy bien, tu codigo es claro y tus funciones estan bien hechas
+// Te deje algunas maneras alternativas de hacer algunas funciones. 
+// Si queres que en algun momento veamos juntas la funcion que no salio, no dejes de avisarme!
+// Lo mismo con los render
+
 var local = {
     vendedoras: ["Ada", "Grace", "Hedy", "Sheryl"],
 
@@ -54,6 +60,11 @@ function precioMaquina(componentes) {
     }
     return componentesPrecios
 }
+
+// esto es un detalle, pero si vas a presentar codigo en un challenge por ej
+// es super importante borrar los console.log (no solo comentarlos)
+// Las observaciones en consola son muy utiles a la hora de codear, pero 
+// en el momento de entregar el trabajo deben sacarse
 
 precioMaquina(["Monitor GPRS 3000", "Motherboard ASUS 1500"])
 console.log('El precio de la máquina que se puede armar con esos componentes es $' + precioMaquina(["Monitor GPRS 3000", "Motherboard ASUS 1500"]))
@@ -187,6 +198,36 @@ console.log(vendedoraDelMes(1, 2019))
 // console.log( ventasMes(1, 2019) ); // 1250
 
 
+
+
+// te agrego una tercera manera de resolverla (mas abstracta)
+
+// function vendedoraDelMes(mes, anio) {
+//   var ventasVendedoras = {};
+
+//   for (var i = 0; i < local.ventas.length; i++) {
+//     if (local.ventas[i].fecha.getMonth() + 1 === mes && local.ventas[i].fecha.getFullYear() === anio) {
+//       var vendedora = ventas[i].nombreVendedora;
+//       if (!ventasVendedoras[vendedora]) {
+//         ventasVendedoras[vendedora] = 0;
+//       }
+
+//       ventasVendedoras[vendedora] += precioMaquina( local.ventas[i].componentes );
+//     }
+//   }
+
+//   var max = vendedoras[0];
+
+//   for (var i = 0; i < vendedoras.length; i++) {
+//     if (max && ventasVendedoras[vendedoras[i]] > ventasVendedoras[max]) {
+//       max = vendedoras[i];
+//     }
+//   }
+
+//   return max;
+// }
+
+
 function ventasMes (mes, anio) {
 
     var fechaVenta =  []
@@ -210,6 +251,22 @@ function ventasMes (mes, anio) {
     // console.log (ventasTotalMes) 
     return ventasTotalMes
 }
+
+// Tu solucion no esta mal, pero quiza sea un poco larga de mas
+// No es necesario hacer un push a un array nuevo y volver a hacer un for
+// Si podemos hacerlo todo en el mismo for
+// Te dejo un ejemplo:
+
+// function ventasMes(mes,anio) {
+//     var ventasDelMes = 0;
+//     for (let i = 0; i < local.ventas.length; i++) {
+//         if (local.ventas[i].fecha.getMonth()+1 === mes && local.ventas[i].fecha.getFullYear() === anio){
+//             ventasDelMes += precioMaquina(local.ventas[i].componentes);
+//         }
+//     }
+//     return ventasDelMes;
+// }
+
 
 ventasMes (1, 2019)
 console.log ('El total de ventas del mes es de: $', ventasMes(1, 2019))
@@ -235,6 +292,11 @@ function ventasVendedora ( vendedora ) {
 
     return ventasTotales
 }   
+
+// Misma observacion que en la funcion anterior
+// No esta mal si esta es una manera en que lo entendes
+// Pero seria bueno ir practicando hacer estas funciones sin tener que pasar por el paso extra
+// de hacer un nuevo array y un nuevo for 
 
 ventasVendedora ('Grace')
 console.log ('Grace tuvo ventas por un total de: $', ventasVendedora ('Grace'))
@@ -277,12 +339,52 @@ console.log ('Grace tuvo ventas por un total de: $', ventasVendedora ('Grace'))
 
 // console.log( huboVentas(3, 2019) ); // false
 
+
+
+
+// Dos puntos para encarar esta funcion:
+// 1. Lo ideal seria recorrer local.precios, en lugar de local.ventas, asi podes acceder a todos los componentes
+// 2. Creo que el error que te impidio continuar esta funcion es que 
+// estas tratando local.ventas como si fuera un objeto y no un array
+// dentro de tu for, tendrias que siempre referirte a el como local.ventas[i] para
+// poder acceder a sus elementos
+
+// Te dejo una posible solucion:
+
+
+// function componenteMasVendido() {
+//     var array = []
+//     for (var i = 0; i < local.precios.length; i++) {
+//         var objetoarray =
+//             { componente: local.precios[i].componente, ventas: 0 }
+//             array.push(objetoarray);
+// }
+// for (j = 0; j < array.length; j++) {
+//     array[j].ventas = cantidadVentas([array[j].componente]);
+// }
+// valormax = 0
+// masvendido = ""
+// for (k = 0; k < array.length; k++) {
+//     if (valormax < array[k].ventas) {
+//         valormax = array[k].ventas;
+//         masvendido = array[k].componente
+//     }
+    
+// }
+// return masvendido
+// }
+
+
 function huboVentas (mes, anio){
 
     var fechaVentas = false
 
     for (i = 0; i < local.ventas.length; i ++){
         if (mes == local.ventas[i].fecha.getMonth() + 1 && mes < 12){
+            // No entiendo bien por que la condicion de que mes sea menor a 12
+            // la funcion anda bien sin esa condicion
+            // asi:
+            // if (mes == local.ventas[i].fecha.getMonth() + 1) {
             fechaVentas = true
         } else {
             false
